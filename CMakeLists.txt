@@ -1,0 +1,24 @@
+cmake_minimum_required(VERSION 3.16)
+project(revealer)
+
+set(CMAKE_CXX_STANDARD 17)
+
+set(SRC
+    src/argument_parsing/parse_arguments.cpp
+    src/collectors/disk_usage_collector.cpp
+    src/collectors/path_collector.cpp
+    src/collect_tarball_items.cpp
+    src/create_tarball.cpp
+)
+
+set(LIB_NAME ${PROJECT_NAME}_lib)
+set(EXEC_NAME ${PROJECT_NAME})
+
+# enable all warnings and treat them as errors
+add_compile_options(-Wall -Wextra -Wpedantic -Werror)
+
+add_library(${LIB_NAME} STATIC ${SRC})
+target_include_directories(${LIB_NAME} PUBLIC src)
+
+add_executable(${EXEC_NAME} src/main.cpp)
+target_link_libraries(${EXEC_NAME} ${LIB_NAME})
