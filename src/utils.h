@@ -4,5 +4,5 @@
 
 inline std::string randomName()
 {
-  return {};
+  return "random_name";
 }

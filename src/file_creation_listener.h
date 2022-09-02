@@ -7,7 +7,9 @@ public:
   FileCreationListener(const std::filesystem::path &directory_to_monitor,
                        CallBackT callback)
       : callback_{callback}, directory_to_monitor_{directory_to_monitor} {}
-  void run() {}
+  void run() {
+    callback_(std::filesystem::path{"jsksk"});
+  }
 
 private:
   CallBackT callback_;

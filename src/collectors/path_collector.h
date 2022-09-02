@@ -12,6 +12,7 @@ public:
   // this must be lazy as things can change, if fiel does not exist warning
   std::vector<TarballItem> collect() const override;
 
+            // what happens if a file to be collected does not exist?
 private:
   std::filesystem::path path_to_include_;
 };
