@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
 
   FileCreationListener listener{directory_to_observe,
                                 on_new_file_created_callback};
-  listener.run();
+  listener.listen();
 
   return EXIT_SUCCESS;
 }

@@ -5,8 +5,15 @@ set(CMAKE_CXX_STANDARD 17)
 
 
 ###### Dependencies #####
+
 # microtar, used to write the tar file
 include(${CMAKE_SOURCE_DIR}/cmake/fetch_microtar.cmake)
+
+# gtest
+include(${CMAKE_SOURCE_DIR}/cmake/fetch_gtest.cmake)
+
+# for unique_path
+find_package(Boost 1.75.0 REQUIRED COMPONENTS filesystem)
 
 set(SRC
     src/argument_parsing/parse_arguments.cpp
@@ -28,3 +35,6 @@ target_include_directories(${LIB_NAME} PUBLIC src)
 
 add_executable(${EXEC_NAME} src/main.cpp)
 target_link_libraries(${EXEC_NAME} ${LIB_NAME})
+
+enable_testing()
+add_subdirectory(test)
