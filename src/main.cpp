@@ -23,9 +23,9 @@ void addPathCollectors(
 }
 
 void addDiskUsageCollector(
-    const std::filesystem::path &path_in_tar,
     std::vector<std::unique_ptr<Collector>> &collectors) {
-  collectors.push_back(std::make_unique<DiskUsageCollector>(path_in_tar, "/"));
+  collectors.push_back(
+      std::make_unique<DiskUsageCollector>("disk_usage.txt", "/"));
 }
 
 std::vector<std::unique_ptr<Collector>> getCollectors(
@@ -33,13 +33,24 @@ std::vector<std::unique_ptr<Collector>> getCollectors(
   std::vector<std::unique_ptr<Collector>> collectors;
   collectors.reserve(paths_to_include_in_tar.size() + 1);
   addPathCollectors(paths_to_include_in_tar, collectors);
-  addDiskUsageCollector("/disk_usage.txt", collectors);
+  addDiskUsageCollector(collectors);
   return collectors;
 }
 
 int main(int argc, char *argv[]) {
   const auto [directory_to_observe, output_directory, paths_to_collect] =
       parseArguments(argc, argv);
+
+  if (!std::filesystem::exists(directory_to_observe)) {
+    std::cout << "[ERROR] Directory '" << directory_to_observe
+              << "' does not exist." << std::endl;
+    return EXIT_FAILURE;
+  }
+
+  std::cout << "The following paths will be included" << std::endl;
+  for (auto p : paths_to_collect) {
+    std::cout << p << std::endl;
+  }
 
   const auto collectors = getCollectors(paths_to_collect);
 

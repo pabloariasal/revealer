@@ -32,7 +32,7 @@ public:
   }
 
   void listenOnce() const {
-    std::cout << "Starting listening to files crated in: " << directory_to_monitor_ << std::endl;
+    std::cout << "listening to file creation in: " << directory_to_monitor_ << std::endl;
     char event_buffer[EVENT_BUF_LEN];
     auto queue_length = read(notify_descriptor_, event_buffer, EVENT_BUF_LEN);
     if (queue_length < 0) {

@@ -1,9 +1,9 @@
-set(LINK_LIBARIES ${LIB_NAME} gmock GTest::gtest_main Boost::filesystem)
+set(LINK_LIBRARIES ${LIB_NAME} gmock GTest::gtest_main Boost::filesystem)
 
 add_executable(test_file_creation_listener file_creation_listener_test.cpp)
-target_link_libraries(test_file_creation_listener ${LINK_LIBARIES})
+target_link_libraries(test_file_creation_listener ${LINK_LIBRARIES})
 add_test(NAME test_file_creation_listener COMMAND test_file_creation_listener)
 
 add_executable(test_disk_usage_collector disk_usage_collector_test.cpp)
-target_link_libraries(test_disk_usage_collector ${LINK_LIBARIES})
+target_link_libraries(test_disk_usage_collector ${LINK_LIBRARIES})
 add_test(NAME test_disk_usage_collector COMMAND test_disk_usage_collector)
