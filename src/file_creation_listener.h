@@ -45,7 +45,7 @@ public:
           (struct inotify_event *)&event_buffer[current_event_offset];
       if (event->len) {
         if (event->mask & IN_CREATE && !(event->mask & IN_ISDIR)) {
-          callback_(std::filesystem::path{event->name});
+          callback_(directory_to_monitor_ / event->name);
         }
       }
       current_event_offset += EVENT_SIZE + event->len;

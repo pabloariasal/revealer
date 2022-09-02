@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+#include <vector>
 #include <filesystem>
 
 #include "collector.h"
@@ -9,8 +11,6 @@ public:
   DiskUsageCollector(const std::filesystem::path &path_in_tarball,
                      const std::string &mount_point)
       : path_in_tarball_{path_in_tarball}, mount_point_{mount_point} {}
-
-  ~DiskUsageCollector() override = default;
 
   // this must be lazy as things can change, if fiel does not exist warning
   std::vector<TarballItem> collect() const override;

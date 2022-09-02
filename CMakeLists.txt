@@ -24,7 +24,7 @@ set(EXEC_NAME ${PROJECT_NAME})
 add_compile_options(-Wall -Wextra -Wpedantic -Werror)
 
 add_library(${LIB_NAME} STATIC ${SRC})
-target_link_libraries(${LIB_NAME} PUBLIC microtar fmt::fmt Boost::program_options)
+target_link_libraries(${LIB_NAME} PUBLIC microtar fmt::fmt Boost::program_options Boost::filesystem)
 target_include_directories(${LIB_NAME} PUBLIC src)
 
 add_executable(${EXEC_NAME} src/main.cpp)

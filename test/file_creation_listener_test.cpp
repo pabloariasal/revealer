@@ -43,9 +43,9 @@ TEST(FileCreationListenerTest, fileCreationListenerTriggersOnFileCreation) {
     createFile(file_path);
     // wait some milliseconds to let the listener react to the created file
     std::this_thread::sleep_for(std::chrono::milliseconds(200));
-    ASSERT_EQ(recorded_file, file);
+    ASSERT_EQ(recorded_file, file_path);
   }
-  // not very nice to detach the thread but since the process terminates right
-  // await we can detach the thread
+  // its not very nice to detach the thread but since the process terminates right
+  // away it doesn't really matter
   listener_thread.detach();
 }

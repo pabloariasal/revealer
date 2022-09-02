@@ -3,6 +3,9 @@
 #include <memory>
 #include <vector>
 
+#include <boost/filesystem.hpp>
+#include <fmt/core.h>
+
 #include "argument_parsing/parse_arguments.h"
 #include "collect_tarball_items.h"
 #include "collectors/disk_usage_collector.h"
@@ -10,7 +13,6 @@
 #include "create_tarball.h"
 #include "file_creation_listener.h"
 #include "pattern_matcher.h"
-#include "utils.h"
 #include "valid_file_pattern.h"
 
 void addPathCollectors(
@@ -42,11 +44,12 @@ int main(int argc, char *argv[]) {
       parseArguments(argc, argv);
 
   if (!std::filesystem::exists(directory_to_observe)) {
-    std::cout << "[ERROR] Directory '" << directory_to_observe
-              << "' does not exist." << std::endl;
+    std::cout << "[ERROR] Directory " << directory_to_observe
+              << " does not exist." << std::endl;
     return EXIT_FAILURE;
   }
 
+  // TODO: remove
   std::cout << "The following paths will be included" << std::endl;
   for (auto p : paths_to_collect) {
     std::cout << p << std::endl;
@@ -57,7 +60,9 @@ int main(int argc, char *argv[]) {
   auto on_new_file_created_callback = [&output_directory,
                                        &collectors](const auto &new_file) {
     if (matchesPattern(new_file.filename(), VALID_FILE_PATTERN)) {
-      auto tarball_filename = output_directory / (randomName() + ".tar");
+      auto tarball_filename =
+          output_directory /
+          fmt::format("{}.tar", boost::filesystem::unique_path().string());
       auto tarball_items = collectTarballItems(collectors);
       createTarball(tarball_filename, tarball_items);
     }
