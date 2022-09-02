@@ -10,6 +10,6 @@ using File = std::filesystem::path;
 using Source = std::variant<File, Buffer>;
 
 struct TarballItem {
-  std::filesystem::path pathOnTarball;
+  std::filesystem::path pathInTarball;
   Source source;
 };

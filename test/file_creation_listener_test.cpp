@@ -3,9 +3,7 @@
 #include <fstream>
 #include <thread>
 
-#include <gmock/gmock.h>
 #include <gtest/gtest.h>
-
 #include <boost/filesystem.hpp>
 
 #include "file_creation_listener.h"

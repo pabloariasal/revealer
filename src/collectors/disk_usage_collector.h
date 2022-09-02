@@ -6,8 +6,9 @@
 
 class DiskUsageCollector : public Collector {
 public:
-  DiskUsageCollector(const std::filesystem::path &path_in_tarball)
-      : path_in_tarball_{path_in_tarball} {}
+  DiskUsageCollector(const std::filesystem::path &path_in_tarball,
+                     const std::string &mount_point)
+      : path_in_tarball_{path_in_tarball}, mount_point_{mount_point} {}
 
   ~DiskUsageCollector() override = default;
 
@@ -16,4 +17,5 @@ public:
 
 private:
   std::filesystem::path path_in_tarball_;
+  std::string mount_point_;
 };

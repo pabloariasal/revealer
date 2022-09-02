@@ -25,7 +25,7 @@ void addPathCollectors(
 void addDiskUsageCollector(
     const std::filesystem::path &path_in_tar,
     std::vector<std::unique_ptr<Collector>> &collectors) {
-  collectors.push_back(std::make_unique<DiskUsageCollector>(path_in_tar));
+  collectors.push_back(std::make_unique<DiskUsageCollector>(path_in_tar, "/"));
 }
 
 std::vector<std::unique_ptr<Collector>> getCollectors(
