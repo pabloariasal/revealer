@@ -8,6 +8,7 @@ include(${CMAKE_SOURCE_DIR}/cmake/fetch_microtar.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/fetch_gtest.cmake)
 find_package(Boost 1.75.0 REQUIRED COMPONENTS filesystem program_options)
 include(${CMAKE_SOURCE_DIR}/cmake/fetch_fmt.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake/fetch_rangev3.cmake)
 
 set(SRC
     src/argument_parsing/parse_arguments.cpp
@@ -24,7 +25,7 @@ set(EXEC_NAME ${PROJECT_NAME})
 add_compile_options(-Wall -Wextra -Wpedantic -Werror)
 
 add_library(${LIB_NAME} STATIC ${SRC})
-target_link_libraries(${LIB_NAME} PUBLIC microtar fmt::fmt Boost::program_options Boost::filesystem)
+target_link_libraries(${LIB_NAME} PUBLIC microtar fmt::fmt Boost::program_options Boost::filesystem range-v3)
 target_include_directories(${LIB_NAME} PUBLIC src)
 
 add_executable(${EXEC_NAME} src/main.cpp)

@@ -3,34 +3,11 @@
 #include <fstream>
 #include <thread>
 
-#include <gtest/gtest.h>
 #include <boost/filesystem.hpp>
+#include <gtest/gtest.h>
 
 #include "file_creation_listener.h"
-
-namespace {
-
-void createFile(const std::filesystem::path &path,
-                const std::string &contents) {
-  std::ofstream outfile(path);
-  outfile << contents << std::endl;
-}
-
-void createFile(const std::filesystem::path &path) {
-  createFile(path, "random content");
-}
-
-std::filesystem::path unique_path() {
-  return boost::filesystem::unique_path().string();
-}
-
-std::filesystem::path createTemporaryDirectory() {
-  auto tmp_dir = std::filesystem::temp_directory_path() / unique_path();
-  std::filesystem::create_directories(tmp_dir);
-  return tmp_dir;
-}
-
-} // namespace
+#include "filesystem_utils.h"
 
 TEST(FileCreationListenerTest, fileCreationListenerTriggersOnFileCreation) {
   auto tmp_dir = createTemporaryDirectory();
@@ -45,7 +22,7 @@ TEST(FileCreationListenerTest, fileCreationListenerTriggersOnFileCreation) {
     std::this_thread::sleep_for(std::chrono::milliseconds(200));
     ASSERT_EQ(recorded_file, file_path);
   }
-  // its not very nice to detach the thread but since the process terminates right
-  // away it doesn't really matter
+  // its not very nice to detach threads but since the process terminates
+  // right away it doesn't really matter
   listener_thread.detach();
 }

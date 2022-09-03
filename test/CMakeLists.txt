@@ -7,3 +7,7 @@ add_test(NAME test_file_creation_listener COMMAND test_file_creation_listener)
 add_executable(test_disk_usage_collector disk_usage_collector_test.cpp)
 target_link_libraries(test_disk_usage_collector ${LINK_LIBRARIES})
 add_test(NAME test_disk_usage_collector COMMAND test_disk_usage_collector)
+
+add_executable(test_path_collector path_collector_test.cpp)
+target_link_libraries(test_path_collector ${LINK_LIBRARIES})
+add_test(NAME test_path_collector COMMAND test_path_collector)

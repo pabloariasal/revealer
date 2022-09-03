@@ -13,7 +13,7 @@ public:
       : path_in_tarball_{path_in_tarball}, mount_point_{mount_point} {}
 
   // this must be lazy as things can change, if fiel does not exist warning
-  std::vector<TarballItem> collect() const override;
+  std::vector<TarballItem> collect() const override final;
 
 private:
   std::filesystem::path path_in_tarball_;

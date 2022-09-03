@@ -13,3 +13,7 @@ struct TarballItem {
   std::filesystem::path pathInTarball;
   Source source;
 };
+
+inline bool operator==(const TarballItem &lhs, const TarballItem &rhs) {
+  return lhs.pathInTarball == rhs.pathInTarball && lhs.source == rhs.source;
+}
