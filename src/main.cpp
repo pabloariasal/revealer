@@ -16,6 +16,8 @@
 #include "pattern_matcher.h"
 #include "triggering_file_pattern.h"
 
+namespace {
+
 void addPathCollectors(
     const std::vector<std::filesystem::path> &paths_to_include_in_tar,
     std::vector<std::unique_ptr<Collector>> &collectors) {
@@ -40,35 +42,38 @@ std::vector<std::unique_ptr<Collector>> getCollectors(
   return collectors;
 }
 
-int main(int argc, char *argv[]) {
-  const auto [directory_to_observe, output_directory, paths_to_collect] =
-      parseArguments(argc, argv);
-
-  if (!std::filesystem::exists(directory_to_observe)) {
-    std::cout << "[ERROR] Directory " << directory_to_observe
-              << " does not exist." << std::endl;
-    return EXIT_FAILURE;
-  }
-
+void createOutputDirIfNotExists(const std::filesystem::path &output_directory) {
   if (!std::filesystem::exists(output_directory)) {
     std::cout << "[INFO] output directory" << output_directory
               << "does not exist. Creating. Creating" << std::endl;
     std::filesystem::create_directories(output_directory);
   }
+}
+} // namespace
+
+int main(int argc, char *argv[]) {
+  const auto [directory_to_observe, output_directory, paths_to_collect] =
+      parseArguments(argc, argv);
+  if (!std::filesystem::exists(directory_to_observe)) {
+    std::cout << "[ERROR] Directory does not exist: " << directory_to_observe
+              << std::endl;
+    return EXIT_FAILURE;
+  }
+  createOutputDirIfNotExists(output_directory);
 
   const auto collectors = getCollectors(paths_to_collect);
 
   auto on_new_file_created_callback = [&output_directory,
                                        &collectors](const auto &new_file) {
     if (matchesPattern(new_file.filename(), FILENAME_TRIGGER_PATTERN)) {
-      auto tarball_filename =
+      auto tarball_path =
+          output_directory /
           fmt::format("{}.tar", boost::filesystem::unique_path().string());
-      auto tarball_items = collectTarballItems(collectors);
       try {
-        createTarball(output_directory / tarball_filename, tarball_items);
-        std::cout << "Tarball created: " << tarball_filename << std::endl;
+        createTarball(tarball_path, collectTarballItems(collectors));
+        std::cout << "Tarball created: " << tarball_path << std::endl;
       } catch (const std::exception &e) {
-        std::cout << "[ERROR] Could not create tarball in " << tarball_filename
+        std::cout << "[ERROR] Tarball creation failed in " << tarball_path
                   << ": " << e.what() << std::endl;
       }
     }

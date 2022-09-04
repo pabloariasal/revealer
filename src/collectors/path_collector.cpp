@@ -26,14 +26,14 @@ getAllFilesInDirectoryRecursively(const std::filesystem::path &path) {
 std::vector<TarballItem> PathCollector::collect() const {
   if (!std::filesystem::exists(path_to_include_)) {
     std::cout << "[WARN] " << path_to_include_
-              << " does not exist and won't be included in the tarball"
+              << " does not exist. It won't be included in the tarball"
               << std::endl;
     return {};
   }
 
   if (std::filesystem::is_empty(path_to_include_)) {
     std::cout << "[WARN] " << path_to_include_
-              << " is empty and won't be included in the tarball" << std::endl;
+              << " is empty. It won't be included in the tarball" << std::endl;
     return {};
   }
 

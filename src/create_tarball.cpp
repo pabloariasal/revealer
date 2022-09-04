@@ -3,6 +3,8 @@
 #include <fstream>
 #include <iostream>
 
+#include <fmt/core.h>
+
 #include "microtar.h"
 
 namespace {
@@ -43,7 +45,6 @@ public:
   }
 
   ~TarBallWritter() {
-    // TODO
     mtar_finalize(&tar_);
     mtar_close(&tar_);
   }
@@ -51,9 +52,9 @@ public:
 private:
   void check(int status) const {
     if (status != MTAR_ESUCCESS) {
-      throw std::runtime_error("Error when writing tarball in " +
-                               path_.string() +
-                               ". Code: " + std::to_string(status));
+      throw std::runtime_error{
+          fmt::format("Error when writing tarball in '{}'. Error code: {}",
+                      path_.string(), status)};
     }
   }
   std::filesystem::path path_;
@@ -74,7 +75,8 @@ void createTarball(const std::filesystem::path &path,
         overloaded{
             [&path_in_tarball, &writter](const std::filesystem::path &path) {
               if (!std::filesystem::exists(path)) {
-                throw std::runtime_error(path.string() + " does not exist.");
+                throw std::runtime_error{
+                    fmt::format("{} does not exist.", path.string())};
               }
               writter.add(path_in_tarball, readFile(path));
             },

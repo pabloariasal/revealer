@@ -36,7 +36,7 @@ public:
     char event_buffer[EVENT_BUF_LEN];
     auto queue_length = read(notify_descriptor_, event_buffer, EVENT_BUF_LEN);
     if (queue_length < 0) {
-      throw std::runtime_error("error while reading inotify error");
+      throw std::runtime_error{"error while reading inotify event queue"};
     }
 
     auto current_event_offset{0};
