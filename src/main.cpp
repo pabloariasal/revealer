@@ -49,6 +49,12 @@ int main(int argc, char *argv[]) {
     return EXIT_FAILURE;
   }
 
+  if (!std::filesystem::exists(output_directory)) {
+    std::cout << "[INFO] output directory" << output_directory
+              << "does not exist. Creating. Creating" << std::endl;
+    std::filesystem::create_directories(output_directory);
+  }
+
   // TODO: remove
   std::cout << "The following paths will be included" << std::endl;
   for (auto p : paths_to_collect) {
