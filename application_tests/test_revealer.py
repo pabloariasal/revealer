@@ -4,17 +4,6 @@ import tarfile
 import time
 from pathlib import Path
 
-FILES_TO_INCLUDE_IN_TARBALL = [('foo/hello.txt', 'Hello MBTI :)'),
-                               ('bar.md', 'bar!\n'),
-                               ('foo/bar/baz.txt', 'baz...')]
-
-# None contents means that we don't care about the contents of the file,
-# only that the final tarball contains a  (non-empty) file exists at the specified path
-DISK_USAGE_FILE = (Path('disk_usage.txt'), None)
-
-# time to wait after a file has been created and the service creates a tarball
-WAIT_TIME_SECONDS = 0.5
-
 
 def create_files(files):
     for path, contents in files:
@@ -35,19 +24,23 @@ def revealer_service(revealer_exec, tmp_path_factory):
     returns the observed_dir, output_dir, and files to be included in the tarball
     a file is a tuple of (file_path: Path, file_contents: str)
     '''
-    dummy_fs_root = tmp_path_factory.mktemp('fs_root')
-    # make paths absolute
-    files = [(dummy_fs_root / path, contents)
-             for path, contents in FILES_TO_INCLUDE_IN_TARBALL]
+    # Initialize dummy filesystem
+    root = tmp_path_factory.mktemp('fs_root')
+    subdir = root / 'subdir'
+    subsubdir = subdir / 'subsubdir'
+    file1 = (root / 'bar.md', 'Hello MBTI :)')
+    file2 = (subdir / 'foo.txt', 'foo!\n')
+    file3 = (subsubdir / 'baz.txt', 'baz...')
+    files = [file1, file2, file3]
     create_files(files)
 
     output_dir = tmp_path_factory.mktemp('output') / 'tarballs'
     observed_dir = tmp_path_factory.mktemp('observed')
-    paths_to_include = [file for file, _ in files]
     popen = subprocess.Popen([revealer_exec,
                               "--observe-directory", observed_dir,
                               "--output-directory", output_dir,
-                              *paths_to_include],
+                              subdir,
+                              file1[0]],
                              stdout=subprocess.PIPE,
                              encoding='utf-8')
     yield observed_dir, output_dir, files
@@ -87,13 +80,20 @@ def tarballs_in_dir(dir):
 
 
 def test_revealer(revealer_service):
-    observed_dir, output_dir, files_to_include = revealer_service
+    observed_dir, output_dir, expected_files = revealer_service
     assert len(tarballs_in_dir(output_dir)) == 0
+
+    WAIT_TIME_SECONDS = 0.5
 
     # Create a file that doesn't match the pattern, nothing should happen
     (observed_dir / 'not_matching_file.txt').touch()
     time.sleep(WAIT_TIME_SECONDS)
     assert len(tarballs_in_dir(output_dir)) == 0
+
+    # the tarball should also contain a 'disk_usage.txt'
+    # `None` means here that we don't care about the actual contents,
+    # only that the file exists within the tarball and is not empty
+    expected_files.append((Path('disk_usage.txt'), None))
 
     # Create a file that matches the pattern
     # a tarball with the expected files should be saved under output_dir
@@ -102,7 +102,7 @@ def test_revealer(revealer_service):
     tarballs = tarballs_in_dir(output_dir)
     assert len(tarballs) == 1
     first_tarball = tarballs[0]
-    check_tarball_valid(first_tarball, files_to_include + [DISK_USAGE_FILE])
+    check_tarball_valid(first_tarball, expected_files)
 
     # Create another file that matches the pattern
     # a new tarball should be saved under output_dir
@@ -111,4 +111,4 @@ def test_revealer(revealer_service):
     tarballs = tarballs_in_dir(output_dir)
     assert len(tarballs) == 2
     second_tarball = next(t for t in tarballs if t != first_tarball)
-    check_tarball_valid(second_tarball, files_to_include + [DISK_USAGE_FILE])
+    check_tarball_valid(second_tarball, expected_files)

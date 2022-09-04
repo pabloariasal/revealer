@@ -5,7 +5,7 @@
 
 class PathCollector : public Collector {
 public:
-  PathCollector(const std::filesystem::path &path_to_include)
+  explicit PathCollector(const std::filesystem::path &path_to_include)
       : path_to_include_{path_to_include} {}
 
   std::vector<TarballItem> collect() const override final;
