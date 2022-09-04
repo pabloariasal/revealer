@@ -15,3 +15,7 @@ add_test(NAME test_path_collector COMMAND test_path_collector)
 add_executable(test_collect_tarball_items collect_tarball_items_test.cpp)
 target_link_libraries(test_collect_tarball_items ${LINK_LIBRARIES})
 add_test(NAME test_collect_tarball_items COMMAND test_collect_tarball_items)
+
+add_executable(test_file_name_trigger file_name_trigger_test.cpp)
+target_link_libraries(test_file_name_trigger ${LINK_LIBRARIES})
+add_test(NAME test_file_name_trigger COMMAND test_file_name_trigger)

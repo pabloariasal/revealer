@@ -13,7 +13,7 @@
 #include "create_tarball.h"
 #include "file_creation_listener.h"
 #include "pattern_matcher.h"
-#include "valid_file_pattern.h"
+#include "triggering_file_pattern.h"
 
 void addPathCollectors(
     const std::vector<std::filesystem::path> &paths_to_include_in_tar,
@@ -59,12 +59,13 @@ int main(int argc, char *argv[]) {
 
   auto on_new_file_created_callback = [&output_directory,
                                        &collectors](const auto &new_file) {
-    if (matchesPattern(new_file.filename(), VALID_FILE_PATTERN)) {
+    if (matchesPattern(new_file.filename(), FILENAME_TRIGGER_PATTERN)) {
       auto tarball_filename =
           output_directory /
           fmt::format("{}.tar", boost::filesystem::unique_path().string());
       auto tarball_items = collectTarballItems(collectors);
       createTarball(tarball_filename, tarball_items);
+      std::cout << "Tarball created: " << tarball_filename << std::endl;
     }
   };
 
