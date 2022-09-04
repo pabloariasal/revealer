@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <cstdlib>
+#include <iostream>
 #include <memory>
 #include <vector>
 
@@ -70,8 +71,13 @@ int main(int argc, char *argv[]) {
           output_directory /
           fmt::format("{}.tar", boost::filesystem::unique_path().string());
       auto tarball_items = collectTarballItems(collectors);
-      createTarball(tarball_filename, tarball_items);
-      std::cout << "Tarball created: " << tarball_filename << std::endl;
+      try {
+        createTarball(tarball_filename, tarball_items);
+        std::cout << "Tarball created: " << tarball_filename << std::endl;
+      } catch (const std::exception &e) {
+        std::cout << "[ERROR] Could not create tarball in " << tarball_filename
+                  << ": " << e.what() << std::endl;
+      }
     }
   };
 
