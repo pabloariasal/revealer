@@ -1,20 +1,20 @@
-# revealer - Data collector
+# revealer
 
-Gathers system data upon file creation events.
+Gathers system data and files upon file creation events.
 
 # Build
 
 ## System Dependencies
 
-* CMake
+* CMake (>=3.16)
 * Boost
-* python3 (for application tests)
+* Python3 (for application tests)
 
 ## Build
 ```
 git clone https://github.com/pabloariasal/revealer.git
 cd revealer
-cmake -Bbuild
+cmake -Bbuild -DCMAKE_BUILD_TYPE=Release
 cmake --build build
 ```
 
@@ -43,10 +43,11 @@ pipenv sync
 
 ## Run the application tests
 ```sh
-pipenv run pytest application_tests --test-exec <revealer_executable_to_test>
+pipenv run pytest application_tests --test-exec <path_to_revealer_exec>
 ```
-e.g.
+
+# Usage
 
 ```sh
-pipenv run pytest application_tests --test-exec build/revealer
+revealer --observe-directory <directory_to_be_observed> --output-directory <output_dir> [paths...]
 ```

@@ -13,8 +13,8 @@ po::variables_map parseCommandLine(int argc, char *argv[]) {
   // clang-format off
   description.add_options()
   ("help", "Display this help message")
-  ("observe-directory", po::value<std::string>()->required(), "The directory to observe for file creation.")
-  ("output-directory", po::value<std::string>()->required(), "directory the tarball will be saved to.")
+  ("observe-directory", po::value<std::string>()->required(), "Directory to observe for file creation.")
+  ("output-directory", po::value<std::string>()->required(), "Directory the tarball will be saved to.")
   ("paths-to-include", po::value<std::vector<std::string>>()->required(), "Files or directories to be included in the tarball.")
   ;
   // clang-format on
@@ -26,7 +26,7 @@ po::variables_map parseCommandLine(int argc, char *argv[]) {
                 .positional(positional)
                 .run(),
             vm);
-  if (vm.count("help")) {
+  if (argc == 1 || vm.count("help")) {
     std::cout << description << std::endl;
     exit(0);
   }

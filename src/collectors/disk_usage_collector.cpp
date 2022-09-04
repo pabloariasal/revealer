@@ -7,10 +7,10 @@
 // https://www.ibm.com/docs/en/zos/2.1.0?topic=functions-statvfs-get-file-system-information
 
 static constexpr auto DISK_REPORT_FMT = "Disk Usage Report\n"
-                                 "Mount Point: {}\n"
-                                 "Used: {:.2f}GB\n"
-                                 "Free: {:.2f}GB\n"
-                                 "Total: {:.2f}GB";
+                                        "Mount Point: {}\n"
+                                        "Used: {:.2f}GB\n"
+                                        "Free: {:.2f}GB\n"
+                                        "Total: {:.2f}GB";
 
 std::vector<TarballItem> DiskUsageCollector::collect() const {
 

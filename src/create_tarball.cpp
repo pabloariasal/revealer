@@ -22,8 +22,8 @@ std::vector<char> readFile(const std::filesystem::path &file_path) {
 }
 
 /**
-  * Opens a stream to a tarball for writing, flushes and closes on destruction.
-*/
+ * Opens a stream to a tarball for writing, flushes and closes on destruction.
+ */
 class TarBallWritter {
 public:
   TarBallWritter(const std::filesystem::path &path) : path_{path} {

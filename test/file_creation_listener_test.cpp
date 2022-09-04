@@ -12,7 +12,9 @@
 TEST(FileCreationListenerTest, FileCreationListenerTriggersOnFileCreation) {
   auto tmp_dir = createTemporaryDirectory();
   auto reported_file_created = std::filesystem::path{};
-  auto callback = [&reported_file_created](const auto &file) { reported_file_created = file; };
+  auto callback = [&reported_file_created](const auto &file) {
+    reported_file_created = file;
+  };
   FileCreationListener listener(tmp_dir, callback);
   auto listener_thread = std::thread([&listener]() { listener.listen(); });
   for (auto file : {"file1.txt", "file2.txt"}) {

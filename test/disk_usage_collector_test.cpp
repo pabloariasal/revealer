@@ -13,11 +13,14 @@ TEST(DiskUsageCollector, reportsUsage) {
   ASSERT_EQ(1, actual.size());
   ASSERT_EQ(actual.front().pathInTarball, path_in_tarball);
   auto generated_report_bytes = std::get<Buffer>(actual.front().source);
-  auto generated_report = std::string(generated_report_bytes.cbegin(), generated_report_bytes.cend());
+  auto generated_report = std::string(generated_report_bytes.cbegin(),
+                                      generated_report_bytes.cend());
   std::cout << generated_report << std::endl;
-  ASSERT_TRUE(std::regex_search(generated_report, std::regex("Mount Point: /")));
-  for (auto type : {"Used", "Free", "Total"})
-  {
-    ASSERT_TRUE(std::regex_search(generated_report, std::regex(std::string(type) + ": (\\d)+\\.\\d{2}GB")));
+  ASSERT_TRUE(
+      std::regex_search(generated_report, std::regex("Mount Point: /")));
+  for (auto type : {"Used", "Free", "Total"}) {
+    ASSERT_TRUE(std::regex_search(
+        generated_report,
+        std::regex(std::string(type) + ": (\\d)+\\.\\d{2}GB")));
   }
 }

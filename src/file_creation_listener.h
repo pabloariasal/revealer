@@ -1,7 +1,7 @@
 #pragma once
 
-#include <iostream>
 #include <filesystem>
+#include <iostream>
 #include <sys/inotify.h>
 #include <unistd.h>
 
@@ -18,7 +18,8 @@ public:
       throw std::runtime_error("inotify_init failed");
     }
     // enter directory into the watch list
-    watch_list_ = inotify_add_watch(notify_descriptor_, directory_to_monitor.c_str(), IN_CREATE);
+    watch_list_ = inotify_add_watch(notify_descriptor_,
+                                    directory_to_monitor.c_str(), IN_CREATE);
   }
 
   FileCreationListener(const FileCreationListener &) = delete;
@@ -52,7 +53,8 @@ public:
   }
 
   void listen() const {
-    std::cout << "listening to file creation in: " << directory_to_monitor_ << std::endl;
+    std::cout << "listening to file creation in: " << directory_to_monitor_
+              << std::endl;
     while (true) {
       listenOnce();
     }
