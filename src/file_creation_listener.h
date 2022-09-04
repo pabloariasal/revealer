@@ -53,8 +53,8 @@ public:
   }
 
   void listen() const {
-    std::cout << "listening to file creation in: " << directory_to_monitor_
-              << std::endl;
+    std::cout << "[INFO]Listening to file creation in: "
+              << directory_to_monitor_ << std::endl;
     while (true) {
       listenOnce();
     }

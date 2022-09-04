@@ -7,6 +7,8 @@
 #include <memory>
 #include <vector>
 
+#include <fmt/core.h>
+
 #include "argument_parsing/parse_arguments.h"
 #include "collect_tarball_items.h"
 #include "collectors/disk_usage_collector.h"
@@ -44,8 +46,8 @@ std::vector<std::unique_ptr<Collector>> getCollectors(
 
 void createOutputDirIfNotExists(const std::filesystem::path &output_directory) {
   if (!std::filesystem::exists(output_directory)) {
-    std::cout << "[INFO] output directory" << output_directory
-              << "does not exist. Creating. Creating" << std::endl;
+    std::cout << "[INFO]Output directory " << output_directory
+              << " does not exist. Creating.\n";
     std::filesystem::create_directories(output_directory);
   }
 }
@@ -71,9 +73,9 @@ int main(int argc, char *argv[]) {
           fmt::format("{}.tar", boost::filesystem::unique_path().string());
       try {
         createTarball(tarball_path, collectTarballItems(collectors));
-        std::cout << "Tarball created: " << tarball_path << std::endl;
+        std::cout << "[INFO]Tarball created: " << tarball_path << std::endl;
       } catch (const std::exception &e) {
-        std::cout << "[ERROR] Tarball creation failed in " << tarball_path
+        std::cout << "[ERROR]Tarball creation failed in " << tarball_path
                   << ": " << e.what() << std::endl;
       }
     }
