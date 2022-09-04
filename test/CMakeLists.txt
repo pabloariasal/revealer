@@ -11,3 +11,7 @@ add_test(NAME test_disk_usage_collector COMMAND test_disk_usage_collector)
 add_executable(test_path_collector path_collector_test.cpp)
 target_link_libraries(test_path_collector ${LINK_LIBRARIES})
 add_test(NAME test_path_collector COMMAND test_path_collector)
+
+add_executable(test_collect_tarball_items collect_tarball_items_test.cpp)
+target_link_libraries(test_collect_tarball_items ${LINK_LIBRARIES})
+add_test(NAME test_collect_tarball_items COMMAND test_collect_tarball_items)

@@ -6,5 +6,5 @@
 #include "tarball_item.h"
 #include "collectors/collector.h"
 
-std::vector<TarballItem>
+[[nodiscard]]std::vector<TarballItem>
 collectTarballItems(const std::vector<std::unique_ptr<Collector>> &collectors);
