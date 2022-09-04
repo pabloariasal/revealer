@@ -38,12 +38,12 @@ protected:
   std::filesystem::path file3_;
 };
 
-TEST_F(PathCollectorTest, pathDoesNotExist) {
+TEST_F(PathCollectorTest, PathDoesNotExist) {
   PathCollector collector{"some/path/that/does/not/exist.txt"};
   ASSERT_TRUE(collector.collect().empty());
 }
 
-TEST_F(PathCollectorTest, directoryIsEmpty) {
+TEST_F(PathCollectorTest, DirectoryIsEmpty) {
   PathCollector collector{createTemporaryDirectory()};
   ASSERT_TRUE(collector.collect().empty());
 }
