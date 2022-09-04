@@ -9,10 +9,10 @@
 #include "file_creation_listener.h"
 #include "filesystem_utils.h"
 
-TEST(FileCreationListenerTest, fileCreationListenerTriggersOnFileCreation) {
+TEST(FileCreationListenerTest, FileCreationListenerTriggersOnFileCreation) {
   auto tmp_dir = createTemporaryDirectory();
-  auto recorded_file = std::filesystem::path{};
-  auto callback = [&recorded_file](const auto &file) { recorded_file = file; };
+  auto reported_file_created = std::filesystem::path{};
+  auto callback = [&reported_file_created](const auto &file) { reported_file_created = file; };
   FileCreationListener listener(tmp_dir, callback);
   auto listener_thread = std::thread([&listener]() { listener.listen(); });
   for (auto file : {"file1.txt", "file2.txt"}) {
@@ -20,9 +20,9 @@ TEST(FileCreationListenerTest, fileCreationListenerTriggersOnFileCreation) {
     createFile(file_path);
     // wait some milliseconds to let the listener react to the created file
     std::this_thread::sleep_for(std::chrono::milliseconds(200));
-    ASSERT_EQ(recorded_file, file_path);
+    ASSERT_EQ(reported_file_created, file_path);
   }
   // its not very nice to detach threads but since the process terminates
-  // right away it doesn't really matter
+  // right after it doesn't really matter
   listener_thread.detach();
 }
