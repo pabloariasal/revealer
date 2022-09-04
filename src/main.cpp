@@ -1,11 +1,11 @@
+#include <fmt/core.h>
+
 #include <algorithm>
+#include <boost/filesystem.hpp>
 #include <cstdlib>
 #include <iostream>
 #include <memory>
 #include <vector>
-
-#include <boost/filesystem.hpp>
-#include <fmt/core.h>
 
 #include "argument_parsing/parse_arguments.h"
 #include "collect_tarball_items.h"
@@ -56,23 +56,16 @@ int main(int argc, char *argv[]) {
     std::filesystem::create_directories(output_directory);
   }
 
-  // TODO: remove
-  std::cout << "The following paths will be included" << std::endl;
-  for (auto p : paths_to_collect) {
-    std::cout << p << std::endl;
-  }
-
   const auto collectors = getCollectors(paths_to_collect);
 
   auto on_new_file_created_callback = [&output_directory,
                                        &collectors](const auto &new_file) {
     if (matchesPattern(new_file.filename(), FILENAME_TRIGGER_PATTERN)) {
       auto tarball_filename =
-          output_directory /
           fmt::format("{}.tar", boost::filesystem::unique_path().string());
       auto tarball_items = collectTarballItems(collectors);
       try {
-        createTarball(tarball_filename, tarball_items);
+        createTarball(output_directory / tarball_filename, tarball_items);
         std::cout << "Tarball created: " << tarball_filename << std::endl;
       } catch (const std::exception &e) {
         std::cout << "[ERROR] Could not create tarball in " << tarball_filename
